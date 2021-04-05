@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</head>
+<body>
+<div class="col-md-6">
+    <!-- 这里一定要把type写进去，如果你要限定上传的类型加上accept='' （我上传的是视频文件）-->
+    <p>上传视频</p>
+    <input type="file" name="myfile" id="ss1"  class="btn btn-primary"><br>
+    <button id="d1" class="btn btn-success">提交</button>
+</div>
+<script>
+    $(function () {
+        $('#d1').click(function () {
+            var formdata = new FormData();
+            formdata.append('file', $('#ss1')[0].files[0]);
+
+            $.ajax({
+                url: '{% url 'oss' %}', // 这里是在django的urls中配置的反向解析路由，可以通过name='test' 访问test这个指向的路由
+                type: 'post',
+                data: formdata,
+                // ajax发送文件需要修改两个固定的参数
+                processData: false,  // 告诉浏览器不要处理我的数据
+                contentType: false,  // 不要用任何的编码，就用我formdata自带的编码格式，django能够自动识别改formdata对象
+                // 回调函数
+                success: function (data) {
+                    alert(data)
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>
